@@ -41,7 +41,7 @@ export default function TodayWeather() {
             <h3 className="">Sunrise & Sunset</h3>
           </HighlightCard.Head>
           <HighlightCard.Middle>
-            <p className="text-5xl">{selectedForecast.sunrise}, {selectedForecast.sunset}</p>
+            <SunriseandSunset sunrise={selectedForecast.sunrise} sunset={selectedForecast.sunset}/>
           </HighlightCard.Middle>
         </HighlightCard>
         <HighlightCard>
@@ -116,3 +116,18 @@ const GaugeChart = ({ value, min = 0, max = 100 }: { value: number, min?: number
 //     </div>
 //   );
 // };
+
+const SunriseandSunset = ({sunrise, sunset}: {sunrise: string, sunset: string}) => {
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-2 items-center justify-center">
+      <img src="./Sun_Arrow_Up.svg" alt="sunrise" width={40} />
+      <p className="text-2xl">{sunrise.substring(1, )}</p>
+      </div>
+      <div className="flex gap-2 items-center justify-center">
+      <img src="./Sun_Arrow_Down.svg" alt="subset" width={40}/>
+      <p className="text-2xl">{sunset.substring(1, )}</p>
+      </div>
+    </div>
+  )
+}
