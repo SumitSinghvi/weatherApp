@@ -1,86 +1,85 @@
 import { useSelector } from "react-redux";
 import HighlightCard from "./HighlightCard";
-
-interface RootData {
-  index: string;
-  content: string;
-  unit: string;
-  detail: string;
-  component?: React.ReactNode; 
-}
+import { type WeatherItems } from "../slices/weatherSlice";
+import { DateToDay } from "../utils/DateToDay";
 
 export default function TodayWeather() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const Todaydata = useSelector((state: any) => state.weather);
-  const dayName = useSelector((state: { dayandtemp: { day: string }}) => state.dayandtemp.day);
-  const data: RootData[] = [
-    {
-      index: "UV Index",
-      content: Todaydata.forecast[0].uvIndex,
-      unit: '',
-      detail: "",
-      component: <GaugeComponent value={5}/>,
-    },
-    {
-      index: "Wind Status",
-      content: Todaydata.forecast[0].windSpeed,
-      unit: 'km/h',
-      detail: "WSW",
-    },
-    {
-      index: "Sunrise & Sunset",
-      content: Todaydata.forecast[0].sunrise,
-      unit: '5:42 PM',
-      detail: "",
-    },
-    {
-      index: "Humidity",
-      content: Todaydata.forecast[0].humidity,
-      unit: '%',
-      detail: "Normal",
-    },
-    {
-      index: "Visibility",
-      content: Todaydata.forecast[0].visibility,
-      unit: 'km',
-      detail: "Average",
-    },
-    {
-      index: "Air Quality",
-      content: Todaydata.forecast[0].airQuality.toString().substring(0, 4),
-      unit: 'pm2.5',
-      detail: "Good",
-    },
-  ];
+  const data = useSelector((state: { weather: { forecast: WeatherItems[], location: Location}}) => state.weather);
+  const day = useSelector((state: { dayandtemp: { day: string}}) => state.dayandtemp.day);
+  
+  const selectedDayIndex = data.forecast.findIndex((forecastItem) => DateToDay(forecastItem.dt) === day);
+  const selectedForecast = selectedDayIndex !== -1 ? data.forecast[selectedDayIndex] : data.forecast[0];
 
   return (
     <div>
+      <h1 className="text-lg py-6 font-semibold">{selectedDayIndex == 0 ? 'Today' : day}'s Highlights</h1>
       <div className="grid grid-cols-3 gap-4">
-      <h1 className="text-lg py-6 font-semibold">{dayName}'s Highlights</h1>
-        {data.map((item, index) => (
-          <HighlightCard key={index}>
-            <HighlightCard.Head>
-              <h3 className="">{item.index}</h3>
-            </HighlightCard.Head>
-            <HighlightCard.Middle>
-              {item.component ? item.component : 
-                <p className="text-5xl">{item.content}</p>}
-            </HighlightCard.Middle>
-            <HighlightCard.Unit>
-              <p className="">{item.unit}</p>
-            </HighlightCard.Unit>
-            <HighlightCard.Bottom>
-              <p className="">{item.detail}</p>
-            </HighlightCard.Bottom>
-          </HighlightCard>
-        ))}
+        <HighlightCard>
+          <HighlightCard.Head>
+            <h3 className="">UV Index</h3>
+          </HighlightCard.Head>
+          <HighlightCard.Middle>
+            <p className="text-5xl">{selectedForecast.uvIndex}</p>
+          </HighlightCard.Middle>
+        </HighlightCard>
+        <HighlightCard>
+          <HighlightCard.Head>
+            <h3 className="">Wind Speed</h3>
+          </HighlightCard.Head>
+          <HighlightCard.Middle>
+            <p className="text-5xl">{selectedForecast.windSpeed}</p>
+          </HighlightCard.Middle>
+          <HighlightCard.Bottom>
+            <p className="text-sm font-semibold">WSW</p>
+          </HighlightCard.Bottom>
+        </HighlightCard>
+        <HighlightCard>
+          <HighlightCard.Head>
+            <h3 className="">Sunrise & Sunset</h3>
+          </HighlightCard.Head>
+          <HighlightCard.Middle>
+            <p className="text-5xl">{selectedForecast.sunrise}, {selectedForecast.sunset}</p>
+          </HighlightCard.Middle>
+        </HighlightCard>
+        <HighlightCard>
+          <HighlightCard.Head>
+            <h3 className="">Humidity</h3>
+          </HighlightCard.Head>
+          <HighlightCard.Middle>
+            <p className="text-5xl">{selectedForecast.humidity}</p>
+          </HighlightCard.Middle>
+          <HighlightCard.Bottom>
+            <p className="text-sm font-semibold">Normal</p>
+          </HighlightCard.Bottom>
+        </HighlightCard>
+        <HighlightCard>
+          <HighlightCard.Head>
+            <h3 className="">Visibility</h3>
+          </HighlightCard.Head>
+          <HighlightCard.Middle>
+            <p className="text-5xl">{selectedForecast.visibility}</p>
+          </HighlightCard.Middle>
+          <HighlightCard.Bottom>
+            <p className="text-sm font-semibold">Average</p>
+          </HighlightCard.Bottom>
+        </HighlightCard>
+        <HighlightCard>
+          <HighlightCard.Head>
+            <h3 className="">Air Quality</h3>
+          </HighlightCard.Head>
+          <HighlightCard.Middle>
+            <p className="text-5xl">{selectedForecast.airQuality}</p>
+          </HighlightCard.Middle>
+          <HighlightCard.Bottom>
+            <p className="text-sm font-semibold">Unheathly</p>
+          </HighlightCard.Bottom>
+        </HighlightCard>
       </div>
     </div>
   );
 }
 
-
-const GaugeComponent = ({ value }: { value: number}) => {
+const GaugeComponent = ({ value }: { value: number }) => {
   const radius = 50; // Radius of the circle
   const circumference = 2 * Math.PI * radius; // Circumference of the circle
   const maxValue = 12; // Maximum value for the gauge
@@ -130,7 +129,3 @@ const GaugeComponent = ({ value }: { value: number}) => {
     </div>
   );
 };
-
-
-
-

@@ -150,7 +150,7 @@ export default function Searchbar() {
         </form>
       </div>
       {cities.length > 0 && (
-        <ul>
+        <ul className="absolute bg-white border border-gray-300 rounded-lg mt-1  max-h-60 overflow-y-auto">
           {cities.map((city: { cityName: string; countryName: string }, i) => (
             <li
               key={i}

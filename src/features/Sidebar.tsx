@@ -50,9 +50,8 @@ export default function Sidebar() {
             <span className="text-white font-bold">{data.location.city}, {data.location.country}</span>
           </div>
         </div> */}
-        <div>
-          <p>{data.location.city}</p>
-          <p>{data.location.country}</p>
+        <div className="text-sm">
+          <p> <span className="font-semibold">{data.location.city}</span>, {data.location.country}</p>
         </div>
       </div>
     </div>
