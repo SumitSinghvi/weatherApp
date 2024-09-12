@@ -4,7 +4,7 @@ import Sidebar from "./features/Sidebar";
 
 export default function App() {
   return (
-    <div>
+    <div className="flex h-screen">
       <Sidebar />
       <Dashboard />
       <Toaster />

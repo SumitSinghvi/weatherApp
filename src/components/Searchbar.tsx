@@ -1,55 +1,75 @@
-import { FormEvent, KeyboardEvent, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setCity } from "../slices/citySlice";
-import toast from "react-hot-toast";
+import { type FormEvent, type KeyboardEvent, useEffect, useState } from "react";
+import { FaSearch } from "react-icons/fa";
 import { getWeather } from "../services/apiWeather";
-import { setWeatherList, WeatherItems } from "../slices/weatherSlice";
+import { setWeatherList } from "../slices/weatherSlice";
+import { useDispatch } from "react-redux";
+import { DateToDay } from "../utils/DateToDay";
+import { setDay, setTemp } from "../slices/dayAndTempSlice";
+import { searchCity } from "../services/apiSearchCity";
 
-
-type WeatherItemAPI = {
-    dt: number;
-    sunrise: number;
-    sunset: number;
-    temp: {
-      day: number;
-    };
-    uvi?: number; 
-    speed: number; 
-    humidity: number;
-    visibility: number;
-    air_quality?: number;
-    weather: {
-      description: string;
-    }[];
-    pop: number; 
+interface RootItem {
+  date: string;
+  astro: {
+    sunrise: string;
+    sunset: string;
   };
-  
+  day: {
+    avgtemp_c: number;
+    uv: number;
+    maxwind_kph: number;
+    avghumidity: number;
+    avgvis_km: number;
+    air_quality: {
+      pm2_5: number;
+    };
+    condition: {
+      text: string;
+    };
+    daily_chance_of_rain: number;
+  };
+}
+
+interface RootCity {
+  name: string;
+  country: string;
+  lat: string;
+  lon: string;
+}
+
+interface RootCities {
+  cityName: string;
+  countryName: string;
+  query: string;
+}
 
 export default function Searchbar() {
-  const [query, setQuery] = useState("");
-  const [cities, setCities] = useState([]);
-  const [index, setIndex] = useState(-1);
+  const [query, setQuery] = useState<string>("");
+  const [index, setIndex] = useState<number>(-1);
   const dispatch = useDispatch();
+
+  const [cities, setCities] = useState<RootCities[]>([]);
 
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-
     const fetchCities = async () => {
       try {
-        const cityData = await getWeather(query, signal);
-        const cityList = cityData.map((obj : { location: { name: string } }) => ({ name: obj.location.name }));
+        const cityData = await searchCity(query, signal);
+        const cityList = cityData.map((location: RootCity) => ({
+          cityName: location.name,
+          countryName: location.country,
+          query: location.lat + ',' + location.lon,
+        }));
         setCities(cityList);
-        console.log(cityData);
       } catch (error: unknown) {
-          if (error instanceof Error) {
-            if (error.message.toLowerCase().includes('canceled')) {
-                console.log('Fetch aborted');
-            } else {
-                console.error(error); // Log other errors
-            }
+        if (error instanceof Error) {
+          if (error.message.toLowerCase().includes("canceled")) {
+            console.log("Fetch aborted");
+          } else {
+            console.error(error); // Log other errors
+          }
         } else {
-            console.error('An unexpected error occurred');
+          console.error("An unexpected error occurred");
         }
       }
     };
@@ -65,84 +85,88 @@ export default function Searchbar() {
     };
   }, [query]);
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    // switch (e.key) {
-    //   case "Enter":
-    //     if (index >= 0 && index < cities.length) {
-    //       setQuery(cities[index].name);
-    //       handleSend();
-    //     }
-    //     break;
-    //   case "ArrowUp":
-    //     setIndex((prev) => Math.max(prev - 1, 0));
-    //     break;
-    //   case "ArrowDown":
-    //     setIndex((prev) => Math.min(prev + 1, cities.length - 1));
-    //     break;
-    // }
-  };
-  // sending request to api
-  const handleSend = async () => {
-    const cityData = await getWeather(query);
-    console.log(cityData);
-    if (cityData.length === 0) {
-      toast.error("City not found");
-      return;
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    switch (e.key) {
+      case "Enter":
+        if (index >= 0 && index < cities.length) {
+          setQuery('');
+          handleSend(cities[index].query);
+        }
+        break;
+      case "ArrowUp":
+        setIndex((prev) => Math.max(prev - 1, 0));
+        break;
+      case "ArrowDown":
+        setIndex((prev) => Math.min(prev + 1, cities.length - 1));
+        break;
     }
-    const { name: city } = cityData[0];
-    dispatch(setCity({ city }));
-    const data = await getWeather(cityData[0].name);
-    console.log(data);
-    const weatherData: WeatherItems[] = data.map((item: WeatherItemAPI) => ({
-        dt: item.dt,
-        sunrise: item.sunrise,
-        sunset: item.sunset,
-        temp: item.temp.day,
-        uvIndex: item.uvi || 0,
-        windSpeed: item.speed,
-        humidity: item.humidity,
-        visibility: item.visibility,
-        airQuality: item.air_quality || 0,
-        weather: {
-            description: item.weather[0].description,
-        },
-        rainChance: item.pop,
-    }));
-    dispatch(setWeatherList(weatherData));
-    setQuery("");
-    setCities([]);
   };
 
-  // form submition
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleSend();
   };
+
+  const handleSend = async (cityName? : string) => {
+    const cityToFetch = cityName || query;
+    const cityData = await getWeather(cityToFetch);
+    const dataToStore = {
+      location: {
+        city: cityData.location.name,
+        country: cityData.location.country,
+      },
+      forecast: cityData.forecast.forecastday.map((item: RootItem) => ({
+        dt: item.date,
+        sunrise: item.astro.sunrise,
+        sunset: item.astro.sunset,
+        temp: item.day.avgtemp_c,
+        uvIndex: item.day.uv,
+        windSpeed: item.day.maxwind_kph,
+        humidity: item.day.avghumidity,
+        visibility: item.day.avgvis_km,
+        airQuality: item.day.air_quality.pm2_5,
+        description: item.day.condition.text,
+        rainChance: item.day.daily_chance_of_rain,
+      })),
+    };
+    dispatch(setWeatherList(dataToStore));
+    dispatch(setDay(DateToDay(dataToStore.forecast[0].dt)));
+    dispatch(setTemp(dataToStore.forecast[0].temp));
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="Search for a place ..."
-      />
+    <div>
+      <div className="relative inline-block w-full">
+        <form onSubmit={handleSubmit} className="">
+          <input
+            className="bg-gray-50 w-full pl-8 py-2 rounded-lg"
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Search for a place ..."
+          />
+          <FaSearch className="absolute left-2 top-1/2 -translate-y-1/2" />
+        </form>
+      </div>
       {cities.length > 0 && (
         <ul>
-          {cities.map((city: { name: string }, i) => (
+          {cities.map((city: { cityName: string; countryName: string }, i) => (
             <li
               key={i}
               onClick={() => {
-                setQuery(city.name);
-                handleSend();
+                const selectedCity = city.cityName;
+                setQuery('');
+                handleSend(selectedCity);
               }}
+              className="cursor-pointer hover:bg-gray-100 p-2 rounded-lg"
               style={{ background: index === i ? "lightgray" : "transparent" }}
             >
-              {city.name}
+              {city.cityName}, {city.countryName}
             </li>
           ))}
         </ul>
       )}
-    </form>
+    </div>
   );
 }

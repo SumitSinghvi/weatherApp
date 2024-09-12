@@ -2,12 +2,8 @@ import axios from "axios";
 
 export async function getWeather(q: string, signal?: AbortSignal) {
     try {
-        const response = await axios.get(`http://localhost:5000/?location=${q}`, {
+        const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${import.meta.env.VITE_WEATHER_API_KEY}&q=${q}&days=7&hour=12&aqi=yes`, {
             signal,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-            }
         })
         return response.data;
     }
@@ -15,4 +11,4 @@ export async function getWeather(q: string, signal?: AbortSignal) {
     catch (error: any) {
         throw Error (error);
     }
-}
+};
