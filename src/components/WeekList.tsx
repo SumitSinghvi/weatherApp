@@ -6,7 +6,7 @@ export default function WeekList() {
   const { weekTempAndDay } = useDayAndTemp();
   return (
     <div className="flex gap-2 mt-10">
-      {weekTempAndDay.map((d: { day: string; temp: string;}) => (
+      {weekTempAndDay.map((d: { day: string; temp: number;}) => (
           <div key={d.day}>
           <Card
             day={d.day}

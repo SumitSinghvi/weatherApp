@@ -39,6 +39,7 @@ const initialState = {
         rainChance: 0,
       },
     ] as WeatherItems[],
+    tempUnit: 'celsius'
   };
 
 const weatherSlice = createSlice({
@@ -49,9 +50,15 @@ const weatherSlice = createSlice({
       state = action.payload;
       return state;
     },
+    setTempUnitValues (state, action) {
+      state.tempUnit = action.payload ? 'fahrenheit' : 'celsius';
+      state.forecast = state.forecast.map((item) => {
+        return {...item, temp: action.payload ? ((item.temp * 9/5) + 32) : ((item.temp -32 ) / (9/5))}     
+      }) 
+    },
   },
 });
 
-export const { setWeatherList } = weatherSlice.actions;
+export const { setWeatherList, setTempUnitValues } = weatherSlice.actions;
 
 export default weatherSlice.reducer;

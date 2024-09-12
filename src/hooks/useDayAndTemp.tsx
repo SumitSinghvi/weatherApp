@@ -3,7 +3,7 @@ import { WeatherItems } from "../slices/weatherSlice";
 
 interface RootTemp {
     day: string;
-    temp: string;
+    temp: number;
   }
 
 export default function useDayAndTemp() {
@@ -18,7 +18,7 @@ export default function useDayAndTemp() {
     temp: item.temp,
   }));
   if(weekTempAndDay[0].day === 'Invalid Date') {
-    return { weekTempAndDay: [{ day: 'Today', temp: '0'}] };
+    return { weekTempAndDay: [{ day: 'Today', temp: 0}] };
   }
   return { weekTempAndDay };
 }

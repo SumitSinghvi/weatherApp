@@ -115,6 +115,7 @@ export default function Searchbar() {
         city: cityData.location.name,
         country: cityData.location.country,
       },
+      tempUnit: 'celsius',
       forecast: cityData.forecast.forecastday.map((item: RootItem) => ({
         dt: item.date,
         sunrise: item.astro.sunrise,
@@ -132,6 +133,8 @@ export default function Searchbar() {
     dispatch(setWeatherList(dataToStore));
     dispatch(setDay(DateToDay(dataToStore.forecast[0].dt)));
     dispatch(setTemp(dataToStore.forecast[0].temp));
+    setQuery('');
+    setCities([]);
   };
 
   return (

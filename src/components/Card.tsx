@@ -9,7 +9,7 @@ export default function Card({
   // onClick,
 }: {
   day: string ;
-  temp: string;
+  temp: number;
   dif: string;
   icon: string;
   // onClick: () => void;
@@ -28,7 +28,7 @@ export default function Card({
       <h1>{day == dayName ? <b>{day}</b> : day }</h1>
       <img width={100} src={icon} alt="icon" />
       <h1>
-        {temparature} {dif}
+        {temparature.toFixed(1)} {dif}
       </h1>
     </div>
   );

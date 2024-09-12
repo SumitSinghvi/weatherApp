@@ -17,10 +17,17 @@ HighlightCard.Head = ({ children }: { children: ReactNode}) => {
     </div>
   );
 };
-
+interface HighlightCardMiddleProps {
+  children: ReactNode;
+  unit?: string;
+  loc?: 'top' | 'bottom';
+}
 // Card Middle
-HighlightCard.Middle = ({ children }: { children: ReactNode}) => {
-  return <div className="px-4 py-4 flex justify-center items-center">{children}</div>;
+HighlightCard.Middle = ({ children, unit, loc }: HighlightCardMiddleProps) => {
+  return <div className="px-4 py-4 flex gap-2 justify-center items-center">
+    {children}
+    <span className={`font-semibold text-lg ${loc == 'top' ? 'mb-auto' : 'mt-auto'}`}>{unit}</span>
+  </div>;
 };
 
 // Card Bottom
