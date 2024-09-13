@@ -7,8 +7,8 @@ export type Location = {
 
 export type WeatherItems = {
   dt: string;
-  sunrise: number;
-  sunset: number;
+  sunrise: string;
+  sunset: string;
   temp: number;
   uvIndex: number;
   windSpeed: number;
@@ -27,8 +27,8 @@ const initialState = {
     forecast: [
       {
         dt: '',
-        sunrise: 0,
-        sunset: 0,
+        sunrise: '0',
+        sunset: '0',
         temp: 0,
         uvIndex: 0,
         windSpeed: 0,

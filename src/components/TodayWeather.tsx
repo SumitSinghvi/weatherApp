@@ -3,6 +3,7 @@ import HighlightCard from "./HighlightCard";
 import { type WeatherItems } from "../slices/weatherSlice";
 import { DateToDay } from "../utils/DateToDay";
 import { FaLocationDot } from "react-icons/fa6";
+import GaugeChart from "./GaugeChart";
 
 
 export default function TodayWeather() {
@@ -21,7 +22,10 @@ export default function TodayWeather() {
             <h3 className="">UV Index</h3>
           </HighlightCard.Head>
           <HighlightCard.Middle>
-            <GaugeChart value={20}/>
+            <div className="w-full flex justify-center">
+              <GaugeChart value={selectedForecast.uvIndex}/>
+            </div>
+          {/* <GaugeChart value={20}/> */}
             {/* <p className="text-5xl">{selectedForecast.uvIndex}</p> */}
           </HighlightCard.Middle>
         </HighlightCard>
@@ -83,39 +87,20 @@ export default function TodayWeather() {
 };
 
 
-const GaugeChart = ({ value, min = 0, max = 100 }: { value: number, min?: number, max?: number}) => {
-  // const percentage = ((value - min) / (max - min)) * 100;
-  // const clampedPercentage = Math.min(100, Math.max(0, percentage));
-  // const rotation = (clampedPercentage / 100) * 180;
-
-  return (
-    <div className="w-[250px] h-24 relative border-gray-200 border-[10px] border-b-0" style={{borderRadius: '250px 250px 0 0'}}>
-      <span className="absolute bottom-0 left-[50%] translate-x-[-50%] text-5xl">{value}</span>
-  </div>
-  );
-};
-
-
-// const GaugeChart = ({ value = 50 }) => {
-//   const normalizedProgress = Math.min(100, Math.max(0, value));
-//   const rotation = (normalizedProgress / 100) * 180 ;
+// const GaugeChart = ({ value, min = 0, max = 100 }: { value: number, min?: number, max?: number}) => {
+//   // const percentage = ((value - min) / (max - min)) * 100;
+//   // const clampedPercentage = Math.min(100, Math.max(0, percentage));
+//   // const rotation = (clampedPercentage / 100) * 180;
 
 //   return (
-//     <div className="relative w-[250px] h-24 border-gray-200 rounded-t-full overflow-hidden">
-//       <div 
-//         className="absolute rounded-t-full bottom-0 left-0 right-0 border-b-0 border-[20px] border-yellow-500 origin-bottom"
-//         style={{
-//           height: '100%',
-//           transform: `rotate(${rotation}deg)`,
-//           transition: 'transform 0.3s ease-out',
-//         }}
-//       />
-//       <div className="absolute inset-0 top-6 flex justify-center items-center">
-//         <span className="text-6xl">{value}</span>
-//       </div>
-//     </div>
+//     <div className="w-[250px] h-24 relative border-gray-200 border-[10px] border-b-0" style={{borderRadius: '250px 250px 0 0'}}>
+//       <span className="absolute bottom-0 left-[50%] translate-x-[-50%] text-5xl">{value}</span>
+//   </div>
 //   );
 // };
+
+
+
 
 const SunriseandSunset = ({sunrise, sunset}: {sunrise: string, sunset: string}) => {
   return (
