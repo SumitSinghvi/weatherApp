@@ -5,14 +5,14 @@ import { setHour, setHourTemp } from "../slices/hourAndTempSlice";
 export default function Card({
   day,
   temp: temparature,
-  dif,
   icon,
+  prevTemp = 0,
 }: // onClick,
 {
   day: string;
   temp: number;
-  dif: string;
   icon: string;
+  prevTemp?: number;
   // onClick: () => void;
 }) {
   const dayName = useSelector(
@@ -27,7 +27,7 @@ export default function Card({
   // );
   const dispatch = useDispatch();
   const regex = /day/;
-  const handleDayClick = async() => {
+  const handleDayClick = async () => {
     if (regex.test(day)) {
       dispatch(setTemp(temparature));
       dispatch(setDay(day));
@@ -36,10 +36,11 @@ export default function Card({
       dispatch(setHourTemp(temparature));
     }
   };
+  const dif = temparature - prevTemp;
   return (
     <div
       onClick={handleDayClick}
-      className="rounded-lg bg-white flex flex-col font-semibold items-center gap-4 text-sm"
+      className="rounded-lg dark:bg-slate-700 bg-white flex flex-col font-semibold items-center gap-4 text-sm"
     >
       {!regex.test(day) ? (
         <h1 className="capitalize">
@@ -48,9 +49,10 @@ export default function Card({
       ) : (
         <h1 className="capitalize">{day == dayName ? <b>{day}</b> : day}</h1>
       )}
-      <img width={100} src={icon} alt="icon" />
-      <h1>
-        Temp - {temparature.toFixed(1)} {dif}
+      <img width={100} src={icon} alt={icon} />
+      <h1 className="space-x-2 flex">
+        <p className="font-semibold">{temparature.toFixed(1)}</p>
+        <span className="text-slate-400">{dif.toFixed(1)}</span>
       </h1>
     </div>
   );

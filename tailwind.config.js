@@ -7,6 +7,9 @@ export default {
   ],
   theme: {
   	extend: {
+		fontFamilyt: {
+			roboto: ["Roboto", "sans-serif"],
+		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

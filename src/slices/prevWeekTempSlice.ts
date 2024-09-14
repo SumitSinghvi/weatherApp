@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type PrevWeatherItems = {
+export interface PrevWeatherItems {
   dt: string;
   temp: number;
   sunrise: string;
@@ -12,8 +12,8 @@ const initialState = {
       {
         dt: '',
         temp: 0,
-        sunrise: '0',
-        sunset: '0',
+        sunrise: '05:54 AM',
+        sunset: '05:44 PM',
       },
     ] as PrevWeatherItems[],
     tempUnit: 'celsius'

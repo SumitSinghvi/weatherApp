@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export async function getWeather(query: string, signal?: AbortSignal) {
+export async function getWeather(q: string, signal?: AbortSignal) {
     try {
-        const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${import.meta.env.VITE_WEATHER_API_KEY}&q=${query}&days=7&hour=12&aqi=yes`, {
+        const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${import.meta.env.VITE_WEATHER_API_KEY}&q=${q}&days=7&hour=12&aqi=yes`, {
             signal,
         })
         return response.data;

@@ -15,9 +15,9 @@ export default function WeekList({ nav }: { nav: string }) {
   }
   return (
     <div className="flex gap-2 mt-10">
-      {weekTempAndDay.map((d: { day: string; temp: number }) => (
+      {weekTempAndDay.map((d: { day: string; temp: number, icon: string, prevTemp: number }) => (
         <div key={d.day}>
-          <Card day={d.day} temp={d.temp} dif="" icon="./Sun.svg" />
+          <Card day={d.day} temp={d.temp} icon={d.icon} prevTemp={d.prevTemp}/>
         </div>
       ))}
     </div>

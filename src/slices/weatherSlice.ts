@@ -27,8 +27,8 @@ const initialState = {
     forecast: [
       {
         dt: '',
-        sunrise: '0',
-        sunset: '0',
+        sunrise: '05:44 AM',
+        sunset: '05:44 PM',
         temp: 0,
         uvIndex: 0,
         windSpeed: 0,

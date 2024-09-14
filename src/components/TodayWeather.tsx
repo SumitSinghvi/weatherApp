@@ -5,6 +5,7 @@ import { DateToDay } from "../utils/DateToDay";
 import { FaLocationDot } from "react-icons/fa6";
 import GaugeChart from "./GaugeChart";
 import { HourToString } from "../utils/HourToString";
+import { timeDifference } from "@/utils/timeDifference";
 
 
 export default function TodayWeather({nav}: {nav: string}) {
@@ -21,6 +22,9 @@ export default function TodayWeather({nav}: {nav: string}) {
   const selectedForecast = selectedDayIndex !== -1 ? data.forecast[selectedDayIndex] : data.forecast[0];
   const selectedForecastToday = selectedHourIndex !== -1 ? hourlyData.forecast[selectedHourIndex] : hourlyData.forecast[0];
 
+  const prevWeekForecast = useSelector((state: { prevweektemp: { forecast: { sunrise: string, sunset: string}[]}}) => state.prevweektemp.forecast);
+  const sunSetDiff = timeDifference(data.forecast[selectedDayIndex+1].sunset, prevWeekForecast[selectedDayIndex != 6 ? selectedDayIndex+1: selectedDayIndex].sunset);
+  const sunRiseDiff = timeDifference(prevWeekForecast[selectedDayIndex+1].sunrise, data.forecast[selectedDayIndex != 6 ? selectedDayIndex+1: selectedDayIndex].sunrise);
   if(nav == 'today'){
     return (
       <div>
@@ -56,7 +60,7 @@ export default function TodayWeather({nav}: {nav: string}) {
             <h3 className="">Sunrise & Sunset</h3>
           </HighlightCard.Head>
           <HighlightCard.Middle>
-              <SunriseandSunset sunrise={selectedForecast.sunrise} sunset={selectedForecast.sunset}/>
+              <SunriseandSunset sunrise={selectedForecast.sunrise} sunset={selectedForecast.sunset} sunSetDif={sunSetDiff} sunRiseDif={sunRiseDiff} />
             </HighlightCard.Middle>
         </HighlightCard>
         <HighlightCard>
@@ -133,8 +137,8 @@ export default function TodayWeather({nav}: {nav: string}) {
           </HighlightCard.Head>
           <HighlightCard.Middle>
             
-              <SunriseandSunset sunrise={selectedForecast.sunrise} sunset={selectedForecast.sunset}/>
-          
+              <SunriseandSunset sunrise={selectedForecast.sunrise} sunset={selectedForecast.sunset} sunSetDif={sunSetDiff} sunRiseDif={sunRiseDiff}/>
+
             </HighlightCard.Middle>
         </HighlightCard>
         <HighlightCard>
@@ -191,16 +195,23 @@ export default function TodayWeather({nav}: {nav: string}) {
 
 
 
-const SunriseandSunset = ({sunrise, sunset}: {sunrise: string, sunset: string}) => {
+const SunriseandSunset = ({sunrise, sunset, sunRiseDif, sunSetDif}: {sunrise: string, sunset: string, sunSetDif: string, sunRiseDif: string}) => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex gap-2 items-center justify-center">
-      <img src="./Sun_Arrow_Up.svg" alt="sunrise" width={40} />
+      <img src="./Sun_Arrow_Up.svg" alt="sunrise" width={60} />
+      <div>
       <p className="text-2xl">{sunrise.substring(1, )}</p>
+      <span className="text-slate-500 font-sans">{sunRiseDif}</span>
+      </div>
+      
       </div>
       <div className="flex gap-2 items-center justify-center">
-      <img src="./Sun_Arrow_Down.svg" alt="subset" width={40}/>
+      <img src="./Sun_Arrow_Down.svg" alt="subset" width={60}/>
+      <div >
       <p className="text-2xl">{sunset.substring(1, )}</p>
+      <span className="text-slate-500 font-sans">{sunSetDif}</span>
+      </div>
       </div>
     </div>
   )

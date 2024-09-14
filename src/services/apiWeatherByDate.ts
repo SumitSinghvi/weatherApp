@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export async function getWeatherByDate(date: string, query: string, signal?: AbortSignal) {
+export async function getWeatherByDate(date: string, query: string, endDate: string, signal?: AbortSignal) {
     try {
-        const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${import.meta.env.VITE_WEATHER_API_KEY}&q=${query}&dt=${date}&days=7&aqi=yes`, {
+        const response = await axios.get(`https://api.weatherapi.com/v1/history.json?key=${import.meta.env.VITE_WEATHER_API_KEY}&q=${query}&dt=${date}&end_dt=${endDate}&aqi=yes`, {
             signal,
         })
         return response.data;

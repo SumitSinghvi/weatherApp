@@ -17,7 +17,7 @@ export default function TodayWeatherCarousel({
       <CarouselContent>
         {data.map((item: { hr: string; temp: number }) => (
           <CarouselItem className="basis-1/3" key={item.hr}>
-            <Card day={item.hr} temp={item.temp} dif="" icon="./Sun.svg" />
+            <Card day={item.hr} temp={item.temp} icon="./Sun.svg" />
           </CarouselItem>
         ))}
       </CarouselContent>

@@ -3,7 +3,7 @@ import { type ReactNode } from "react";
 // Main Card component
 const HighlightCard = ({ children }: { children: ReactNode}) => {
   return (
-    <div className="max-w-80 rounded-lg bg-white h-48">
+    <div className="max-w-80 rounded-lg bg-white h-48 dark:bg-slate-700">
       {children}
     </div>
   );

@@ -1,4 +1,4 @@
-import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
+import { type KeyboardEvent, useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { getWeather } from "../services/apiWeather";
 import { setWeatherList } from "../slices/weatherSlice";
@@ -11,7 +11,7 @@ import { setTodayWeatherList } from "../slices/todayWeatherSlice";
 import { setHour, setHourTemp } from "@/slices/hourAndTempSlice";
 import { getWeatherByDate } from "@/services/apiWeatherByDate";
 import { setPrevWeekWeatherList } from "@/slices/prevWeekTempSlice";
-import { getPastDate } from "@/utils/getPrevDate";
+import { getPastDate, getTodayDate } from "@/utils/getPrevDate";
 
 export interface RootItem {
   date: string;
@@ -75,7 +75,7 @@ interface RootCities {
 }
 
 export default function Searchbar() {
-  // const hasRun = useRef(false);
+  const hasRun = useRef(false);
   const [query, setQuery] = useState<string>("");
   const [index, setIndex] = useState<number>(-1);
   const dispatch = useDispatch();
@@ -136,17 +136,13 @@ export default function Searchbar() {
         break;
     }
   };
-
-  const handleSubmit = async(e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    handleSend();
-  };
-  const prevWeekDate = getPastDate(7);
+  const todayDay = getTodayDate();
+  const prevWeekDate = getPastDate(6);
   const handleSend = async (cityName? : string) => {
     const cityToFetch = cityName || query;
     const cityData = await getWeather(cityToFetch);
     const todaCityData = await getTodayWeather(cityToFetch);
-    const prevWeekData = await getWeatherByDate(prevWeekDate,cityToFetch);
+    const prevWeekData = await getWeatherByDate(prevWeekDate,cityToFetch, todayDay);
     const todayDataToStore = {
       location: {
         city: todaCityData.location.name,
@@ -191,7 +187,7 @@ export default function Searchbar() {
       })),
     };
     const prevWeekDataToStore = {
-      forecast: prevWeekData.forecast.forcastday.map((item: RootPrevWeek) => ({
+      forecast: prevWeekData.forecast.forecastday.map((item: RootPrevWeek) => ({
         dt: item.date,
         temp: item.day.avgtemp_c,
         sunrise: item.astro.sunrise,
@@ -210,17 +206,16 @@ export default function Searchbar() {
     setCities([]);
   };
 
-  // if(!hasRun.current) {
-  //   handleSend('bangalore');
-  //   hasRun.current = true;
-  // }
+  if(!hasRun.current) {
+    handleSend('bangalore');
+    hasRun.current = true;
+  }
 
   return (
     <div>
       <div className="relative inline-block w-full">
-        <form onSubmit={handleSubmit} className="">
           <input
-            className="bg-gray-50 w-full pl-8 py-2 rounded-lg"
+            className="bg-slate-50 w-full pl-8 py-2 rounded-lg dark:bg-slate-700"
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -228,7 +223,6 @@ export default function Searchbar() {
             placeholder="Search for a place ..."
           />
           <FaSearch className="absolute left-2 top-1/2 -translate-y-1/2" />
-        </form>
       </div>
       {cities.length > 0 && (
         <ul className="absolute bg-white border border-gray-300 rounded-lg mt-1  max-h-60 overflow-y-auto">
