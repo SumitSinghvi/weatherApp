@@ -1,13 +1,19 @@
-import { type FormEvent, type KeyboardEvent, useEffect, useState } from "react";
+import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { getWeather } from "../services/apiWeather";
 import { setWeatherList } from "../slices/weatherSlice";
 import { useDispatch } from "react-redux";
 import { DateToDay } from "../utils/DateToDay";
-import { setDay, setTemp } from "../slices/dayAndTempSlice";
+import { setDate, setDay, setTemp } from "../slices/dayAndTempSlice";
 import { searchCity } from "../services/apiSearchCity";
+import { getTodayWeather } from "../services/apiTodayWeather";
+import { setTodayWeatherList } from "../slices/todayWeatherSlice";
+import { setHour, setHourTemp } from "@/slices/hourAndTempSlice";
+import { getWeatherByDate } from "@/services/apiWeatherByDate";
+import { setPrevWeekWeatherList } from "@/slices/prevWeekTempSlice";
+import { getPastDate } from "@/utils/getPrevDate";
 
-interface RootItem {
+export interface RootItem {
   date: string;
   astro: {
     sunrise: string;
@@ -28,12 +34,38 @@ interface RootItem {
     daily_chance_of_rain: number;
   };
 }
+export interface RootHourItem {
+  time: string;
+    temp_c: number;
+    uv: number;
+    wind_kph: number;
+    humidity: number;
+    vis_km: number;
+    air_quality: {
+      pm2_5: number;
+    };
+    condition: {
+      text: string;
+    };
+    chance_of_rain: number;
+}
 
 interface RootCity {
   name: string;
   country: string;
   lat: string;
   lon: string;
+}
+
+interface RootPrevWeek {
+  date: string;
+  day: {
+    avgtemp_c: number;
+  }
+  astro:{
+    sunrise: string;
+    sunset: string;
+  }
 }
 
 interface RootCities {
@@ -43,9 +75,12 @@ interface RootCities {
 }
 
 export default function Searchbar() {
+  // const hasRun = useRef(false);
   const [query, setQuery] = useState<string>("");
   const [index, setIndex] = useState<number>(-1);
   const dispatch = useDispatch();
+
+  
 
   const [cities, setCities] = useState<RootCities[]>([]);
 
@@ -106,10 +141,35 @@ export default function Searchbar() {
     e.preventDefault();
     handleSend();
   };
-
+  const prevWeekDate = getPastDate(7);
   const handleSend = async (cityName? : string) => {
     const cityToFetch = cityName || query;
     const cityData = await getWeather(cityToFetch);
+    const todaCityData = await getTodayWeather(cityToFetch);
+    const prevWeekData = await getWeatherByDate(prevWeekDate,cityToFetch);
+    const todayDataToStore = {
+      location: {
+        city: todaCityData.location.name,
+        country: todaCityData.location.country,
+      },
+      tempUnit: 'celsius',
+      forecast: todaCityData.forecast.forecastday[0].hour
+      .map((item: RootHourItem) => ({
+        dt: item.time,
+        temp: item.temp_c,
+        uvIndex: item.uv,
+        windSpeed: item.wind_kph,
+        humidity: item.humidity,
+        visibility: item.vis_km,
+        airQuality: item.air_quality.pm2_5,
+        description: item.condition.text,
+        rainChance: item.chance_of_rain,
+      })),
+      astro: {
+        sunrise: todaCityData.forecast.forecastday[0].astro.sunrise,
+        sunset: todaCityData.forecast.forecastday[0].astro.sunset,
+      }
+    }
     const dataToStore = {
       location: {
         city: cityData.location.name,
@@ -130,12 +190,30 @@ export default function Searchbar() {
         rainChance: item.day.daily_chance_of_rain,
       })),
     };
+    const prevWeekDataToStore = {
+      forecast: prevWeekData.forecast.forcastday.map((item: RootPrevWeek) => ({
+        dt: item.date,
+        temp: item.day.avgtemp_c,
+        sunrise: item.astro.sunrise,
+        sunset: item.astro.sunset,
+      }))
+    }
+    dispatch(setPrevWeekWeatherList(prevWeekDataToStore));
+    dispatch(setTodayWeatherList(todayDataToStore));
     dispatch(setWeatherList(dataToStore));
+    dispatch(setDate(dataToStore.forecast[0].dt));
     dispatch(setDay(DateToDay(dataToStore.forecast[0].dt)));
     dispatch(setTemp(dataToStore.forecast[0].temp));
+    dispatch(setHour(todayDataToStore.forecast[0].dt));
+    dispatch(setHourTemp(todayDataToStore.forecast[0].temp));
     setQuery('');
     setCities([]);
   };
+
+  // if(!hasRun.current) {
+  //   handleSend('bangalore');
+  //   hasRun.current = true;
+  // }
 
   return (
     <div>

@@ -24,7 +24,7 @@ interface HighlightCardMiddleProps {
 }
 // Card Middle
 HighlightCard.Middle = ({ children, unit, loc }: HighlightCardMiddleProps) => {
-  return <div className="px-4 py-4 flex gap-2">
+  return <div className="px-4 py-4 flex gap-2 mt-2">
     {children}
     <span className={`font-semibold text-lg ${loc == 'top' ? 'mb-auto' : 'mt-auto'}`}>{unit}</span>
   </div>;
