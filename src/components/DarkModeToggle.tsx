@@ -15,7 +15,6 @@ function DarkModeToggle() {
     }
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
   }, [darkMode]);
-
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
@@ -24,5 +23,4 @@ function DarkModeToggle() {
     <Switch onClick={toggleDarkMode} checked={darkMode} />
   );
 }
-
 export default DarkModeToggle;

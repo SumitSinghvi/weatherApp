@@ -101,7 +101,6 @@ export default function TodayWeather({nav}: {nav: string}) {
     )
   }
 
-
   return (
     <div>
       <h1 className="text-lg py-6 font-semibold">{selectedDayIndex == 0 ? 'Today' : day}'s Highlights</h1>

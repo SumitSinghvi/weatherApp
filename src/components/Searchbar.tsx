@@ -212,7 +212,7 @@ export default function Searchbar() {
   }
 
   return (
-    <div>
+    <div >
       <div className="relative inline-block w-full">
           <input
             className="bg-slate-50 w-full pl-8 py-2 rounded-lg dark:bg-slate-700"
@@ -225,7 +225,7 @@ export default function Searchbar() {
           <FaSearch className="absolute left-2 top-1/2 -translate-y-1/2" />
       </div>
       {cities.length > 0 && (
-        <ul className="absolute bg-white border border-gray-300 rounded-lg mt-1  max-h-60 overflow-y-auto">
+        <ul className="absolute dark:bg-slate-900 bg-white border border-gray-300 rounded-lg mt-1  max-h-60 overflow-y-auto">
           {cities.map((city: { cityName: string; countryName: string }, i) => (
             <li
               key={i}
@@ -234,8 +234,7 @@ export default function Searchbar() {
                 setQuery('');
                 handleSend(selectedCity);
               }}
-              className="cursor-pointer hover:bg-gray-100 p-2 rounded-lg"
-              style={{ background: index === i ? "lightgray" : "transparent" }}
+              className={`cursor-pointer hover:bg-gray-100 md:text-base text-[15px] p-2 rounded-lg ${index === i ? "bg-gray-300" : ""}`}
             >
               {city.cityName}, {city.countryName}
             </li>

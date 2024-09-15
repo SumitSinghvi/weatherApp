@@ -11,7 +11,7 @@ export default function Navbar({setNav, nav}: {setNav: Function, nav: string}) {
   const tempUnit = useSelector((state: { weather: { tempUnit: string }}) => state.weather.tempUnit);
   const dispatch = useDispatch();
   return (
-    <div className="flex items-center justify-between text-2xl">
+    <div className="flex flex-col md:flex-row gap-5 items-center justify-between text- md:text-2xl">
       <div className="space-x-10">
         <button className={`${nav == 'today' ? 'border-b-2 border-black dark:border-white' : ''}`} onClick={() => setNav('today')}>Today</button>
         <button className={`${nav == 'week' ? 'border-b-2 border-black dark:border-white' : ''}`} onClick={() => setNav('week')}>Week</button>
@@ -25,7 +25,7 @@ export default function Navbar({setNav, nav}: {setNav: Function, nav: string}) {
               dispatch(setPrevWeekTempUnitValues(false));
               dispatch(setTodayTempUnitValues(false));
             }}
-            className={`text-xl py-1 px-2 font-semibold rounded-full ${tempUnit == 'celsius' ? 'bg-black text-white' : 'bg-white text-black'}`}>°C</button>
+            className={`md:text-xl text-sm py-1 px-2 font-semibold rounded-full ${tempUnit == 'celsius' ? 'bg-black text-white' : 'bg-white text-black'}`}>°C</button>
             <button
             disabled={tempUnit == 'fahrenheit'}
             onClick={() => { 
@@ -33,7 +33,7 @@ export default function Navbar({setNav, nav}: {setNav: Function, nav: string}) {
               dispatch(setPrevWeekTempUnitValues(true));
               dispatch(setTodayTempUnitValues(true));
             }}
-            className={`text-xl py-1 px-2 font-semibold rounded-full ${tempUnit == 'fahrenheit' ? 'bg-black text-white' : 'bg-white text-black'}`}>°F</button>
+            className={`md:text-xl text-sm py-1 px-2 font-semibold rounded-full ${tempUnit == 'fahrenheit' ? 'bg-black text-white' : 'bg-white text-black'}`}>°F</button>
         </div>
         <DarkModeToggle />
         <CgProfile size={40}/>

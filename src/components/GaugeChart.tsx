@@ -79,14 +79,15 @@
 
 // export default GaugeChart;
 
-import { Gauge,  gaugeClasses } from "@mui/x-charts/Gauge";
+import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 
 export default function GaugeChart({ value }: { value: number }) {
+
   return (
-    <div >
+    <div>
       <Gauge
-      valueMin={0}
-      valueMax={12}
+        valueMin={0}
+        valueMax={12}
         width={250}
         height={150}
         value={value}
@@ -95,7 +96,12 @@ export default function GaugeChart({ value }: { value: number }) {
         sx={{
           [`& .${gaugeClasses.valueText}`]: {
             fontSize: 60,
-            transform: 'translate(0px, -15px)',
+            transform: "translate(0px, -15px)",
+          },
+          [`& .${gaugeClasses.valueText} text`]: {
+            fill: "white",
+            dominantBaseline: "central",
+            textAnchor: "middle",
           },
         }}
         innerRadius="80%"
