@@ -234,7 +234,7 @@ export default function Searchbar() {
                 setQuery('');
                 handleSend(selectedCity);
               }}
-              className={`cursor-pointer hover:bg-gray-100 md:text-base text-[15px] p-2 rounded-lg ${index === i ? "bg-gray-300" : ""}`}
+              className={`cursor-pointer hover:bg-gray-100 p-2 rounded-lg ${index === i ? "bg-gray-500" : ""}`}
             >
               {city.cityName}, {city.countryName}
             </li>

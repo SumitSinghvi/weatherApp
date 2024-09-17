@@ -6,7 +6,7 @@ import WeekList from "../components/WeekList";
 export default function Dashboard({setNav, nav}: {setNav: (nav: string) => void, nav: string}) {
   
     return (
-    <div className="flex-grow bg-slate-100 p-10 dark:bg-slate-900">
+    <div className="flex flex-col flex-1 bg-slate-100 p-10 dark:bg-slate-900">
       <div className="hidden md:block">
         <Navbar setNav={setNav} nav={nav}/>
       </div>

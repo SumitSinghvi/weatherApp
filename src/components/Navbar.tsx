@@ -11,7 +11,7 @@ export default function Navbar({setNav, nav}: {setNav: Function, nav: string}) {
   const tempUnit = useSelector((state: { weather: { tempUnit: string }}) => state.weather.tempUnit);
   const dispatch = useDispatch();
   return (
-    <div className="flex flex-col md:flex-row gap-5 items-center justify-between text- md:text-2xl">
+    <div className=" flex flex-col md:flex-row gap-5 items-center justify-between text-base md:text-2xl">
       <div className="space-x-10">
         <button className={`${nav == 'today' ? 'border-b-2 border-black dark:border-white' : ''}`} onClick={() => setNav('today')}>Today</button>
         <button className={`${nav == 'week' ? 'border-b-2 border-black dark:border-white' : ''}`} onClick={() => setNav('week')}>Week</button>

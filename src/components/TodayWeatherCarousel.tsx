@@ -10,15 +10,15 @@ import {
 export default function TodayWeatherCarousel({
   data,
 }: {
-  data: { hr: string; temp: number }[];
+  data: { hr: string; temp: number, icon: string }[];
 }) {
   return (
-    <div className="md:w-3/4 md:p-5">
-      <Carousel>
-        <CarouselContent>
-          {data.map((item: { hr: string; temp: number }) => (
-            <CarouselItem className="basis-1/3" key={item.hr}>
-              <Card day={item.hr} temp={item.temp} icon="./Sun.svg" />
+    <div className="md:w-full md:p-5">
+      <Carousel >
+        <CarouselContent className="w-60">
+          {data.map((item: { hr: string; temp: number, icon: string }) => (
+            <CarouselItem className="basis-1/7" key={item.hr}>
+              <Card day={item.hr} temp={item.temp} icon={item.icon} />
             </CarouselItem>
           ))}
         </CarouselContent>

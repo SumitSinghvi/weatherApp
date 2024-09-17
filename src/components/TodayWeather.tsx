@@ -28,8 +28,8 @@ export default function TodayWeather({nav}: {nav: string}) {
   if(nav == 'today'){
     return (
       <div>
-      <h1 className="text-lg py-6 font-semibold">Hour - {hour}'s Highlights</h1>
-      <div className="grid grid-cols-3 gap-4">
+      <h1 className="text-sm md:text-lg py-6 font-semibold">Hour - {hour}'s Highlights</h1>
+      <div className="grid md:grid-cols-3 gap-4">
         <HighlightCard>
           <HighlightCard.Head>
             <h3 className="">UV Index</h3>
@@ -103,8 +103,8 @@ export default function TodayWeather({nav}: {nav: string}) {
 
   return (
     <div>
-      <h1 className="text-lg py-6 font-semibold">{selectedDayIndex == 0 ? 'Today' : day}'s Highlights</h1>
-      <div className="grid grid-cols-3 gap-4">
+      <h1 className="text-sm md:text-lg py-6 font-semibold">{selectedDayIndex == 0 ? 'Today' : day}'s Highlights</h1>
+      <div className="grid md:grid-cols-3 gap-4">
         <HighlightCard>
           <HighlightCard.Head>
             <h3 className="">UV Index</h3>

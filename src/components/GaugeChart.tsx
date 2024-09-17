@@ -82,7 +82,7 @@
 import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 
 export default function GaugeChart({ value }: { value: number }) {
-
+ 
   return (
     <div>
       <Gauge
@@ -99,7 +99,7 @@ export default function GaugeChart({ value }: { value: number }) {
             transform: "translate(0px, -15px)",
           },
           [`& .${gaugeClasses.valueText} text`]: {
-            fill: "white",
+            fill: "gray",
             dominantBaseline: "central",
             textAnchor: "middle",
           },
@@ -109,4 +109,5 @@ export default function GaugeChart({ value }: { value: number }) {
       />
     </div>
   );
+  
 }
