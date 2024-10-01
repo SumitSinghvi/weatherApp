@@ -1,20 +1,30 @@
-import Searchbar from "../components/Searchbar";
+import { useSelector } from "react-redux";
 import { RiCelsiusLine } from "react-icons/ri";
 import { CiCloud } from "react-icons/ci";
 import { IoReorderFourOutline } from "react-icons/io5";
 import { TbTemperatureFahrenheit } from "react-icons/tb";
-
-import { useSelector } from "react-redux";
 import { Location, WeatherItems } from "../slices/weatherSlice";
 import { DateToDay } from "../utils/DateToDay";
-import Navbar from "../components/Navbar";
 
-export default function Sidebar({setNav, nav}: {setNav: (nav: string) => void, nav: string}) {
-  // const icon = {
-  //   'Sunny': './Sun.svg',
-  //   'Cloudy': './Cloudy.svg',
-  //   'Rainy': './Rainy.svg',
-  // }
+import Navbar from "../components/Navbar";
+import Searchbar from "../components/Searchbar";
+import { getIcons } from "@/utils/getIcons";
+
+
+/**
+ * it displays the avg temp of the day with city name
+ * it also displays the weather icon
+ * it also displays the weather description
+ */
+export default function Sidebar({
+  setNav,
+  nav,
+}: {
+  setNav: (nav: string) => void;
+  nav: string;
+}) {
+
+  // used to get the data from the store
   const data = useSelector(
     (state: { weather: { forecast: WeatherItems[]; location: Location } }) =>
       state.weather
@@ -30,47 +40,27 @@ export default function Sidebar({setNav, nav}: {setNav: (nav: string) => void, n
     selectedDayIndex !== -1
       ? data.forecast[selectedDayIndex]
       : data.forecast[0];
+
   const tempUnit = useSelector(
     (state: { weather: { tempUnit: string } }) => state.weather.tempUnit
   );
 
-  //regex test for icon descriptions
-  const sunRegex = /^(Sunny)$/i;
-  const cloudyRegex =
-    /^(Partly Cloudy |Partly cloudy|Cloudy|Overcast|Mist|Fog|Freezing fog)$/i;
-  const rainRegex =
-    /^(Patchy rain nearby|Patchy rain possible|Patchy light drizzle|Light drizzle|Freezing drizzle|Heavy freezing drizzle|Patchy light rain|Light rain|Moderate rain at times|Moderate rain|Heavy rain at times|Heavy rain|Light freezing rain|Moderate or heavy freezing rain|Light rain shower|Moderate or heavy rain shower|Torrential rain shower|Patchy light rain with thunder|Moderate or heavy rain with thunder)$/i;
-  const snowyRegex =
-    /^(Patchy snow possible|Patchy sleet possible|Patchy freezing drizzle possible|Blowing snow|Blizzard|Patchy light snow|Light snow|Patchy moderate snow|Moderate snow|Patchy heavy snow|Heavy snow|Ice pellets|Light sleet|Moderate or heavy sleet|Light snow showers|Moderate or heavy snow showers|Light showers of ice pellets|Moderate or heavy showers of ice pellets|Patchy light snow with thunder|Moderate or heavy snow with thunder)$/i;
-  const sunRainRegex = /^(Thundery outbreaks possible)$/i;
-  console.log(selectedForecast.description);
-  const icon = data.forecast.map((item) => {
-    if (sunRegex.test(item.description)) {
-      return "/Sun.svg";
-    } else if (cloudyRegex.test(item.description)) {
-      return "/Clouds.svg";
-    } else if (rainRegex.test(item.description)) {
-      return "/Rain.svg";
-    } else if (snowyRegex.test(item.description)) {
-      return "/Snow.svg";
-    } else if (sunRainRegex.test(item.description)) {
-      return "/Sun-Rain.svg";
-    } else {
-      return "/sun.svg";
-    }
-  });
+  //use to get the weather icon according to the description
+  const icons = data.forecast.map((item) => item.description);
+  const iconList = getIcons(icons);
+
   return (
     <div className="md:w-1/4 lg:w-1/5 px-6 py-8 dark:bg-black w-full">
       <Searchbar />
       <div className="pt-8 md:hidden">
-        <Navbar setNav={setNav} nav={nav}/>
+        <Navbar setNav={setNav} nav={nav} />
       </div>
       <div className="flex flex-col items-center md:items-start">
         <div className="md:pl-10 md:pt-10 pt-6">
           <img
-            src={icon[selectedDayIndex]}
+            src={iconList[selectedDayIndex]}
             className="md:w-[170px] w-[100px]"
-            alt={icon[selectedDayIndex]}
+            alt={iconList[selectedDayIndex]}
             data-testid="my-image"
           />
         </div>
@@ -106,15 +96,8 @@ export default function Sidebar({setNav, nav}: {setNav: (nav: string) => void, n
             </p>
           </div>
         </div>
-        {/* <div className="relative w-3/4 h-24 mt-10 bg-gray-200">
-          <img src="myCity.jpg" alt="city" className="w-full rounded-lg h-full object-cover" />
-          <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-white font-bold">{data.location.city}, {data.location.country}</span>
-          </div>
-          </div> */}
         <div className="md:text-sm text-[14px]">
           <p>
-            {" "}
             <span className="font-semibold">{data.location.city}</span>,{" "}
             {data.location.country}
           </p>

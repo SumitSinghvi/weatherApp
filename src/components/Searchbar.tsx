@@ -12,81 +12,28 @@ import { setHour, setHourTemp } from "../slices/hourAndTempSlice";
 import { getWeatherByDate } from "../services/apiWeatherByDate";
 import { setPrevWeekWeatherList } from "../slices/prevWeekTempSlice";
 import { getPastDate, getTodayDate } from "../utils/getPrevDate";
+import { RootCities, RootCity, RootHourItem, RootItem, RootPrevWeek } from "@/type";
 
-export interface RootItem {
-  date: string;
-  astro: {
-    sunrise: string;
-    sunset: string;
-  };
-  day: {
-    avgtemp_c: number;
-    uv: number;
-    maxwind_kph: number;
-    avghumidity: number;
-    avgvis_km: number;
-    air_quality: {
-      pm2_5: number;
-    };
-    condition: {
-      text: string;
-    };
-    daily_chance_of_rain: number;
-  };
-}
-export interface RootHourItem {
-  time: string;
-    temp_c: number;
-    uv: number;
-    wind_kph: number;
-    humidity: number;
-    vis_km: number;
-    air_quality: {
-      pm2_5: number;
-    };
-    condition: {
-      text: string;
-    };
-    chance_of_rain: number;
-}
-
-interface RootCity {
-  name: string;
-  country: string;
-  lat: string;
-  lon: string;
-}
-
-interface RootPrevWeek {
-  date: string;
-  day: {
-    avgtemp_c: number;
-  }
-  astro:{
-    sunrise: string;
-    sunset: string;
-  }
-}
-
-interface RootCities {
-  cityName: string;
-  countryName: string;
-  query: string;
-}
-
+/**
+ * this component is used to search for a city and display the results in the dropdown
+ * it updates our state with dispatch function
+ */
 export default function Searchbar() {
   const hasRun = useRef(false);
   const [query, setQuery] = useState<string>("");
   const [index, setIndex] = useState<number>(-1);
   const dispatch = useDispatch();
-
-  
-
   const [cities, setCities] = useState<RootCities[]>([]);
 
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
+  /**
+   * Fetches the list of cities that match the query string.
+   * If the component is unmounted while the fetch is in progress, it will be aborted.
+   * If the fetch is successful, it will update the state with the list of cities.
+   * If the fetch fails, it will log an error message.
+   */
     const fetchCities = async () => {
       try {
         const cityData = await searchCity(query, signal);
@@ -121,6 +68,7 @@ export default function Searchbar() {
   }, [query]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    // this adds control for up and down arrow
     switch (e.key) {
       case "Enter":
         if (index >= 0 && index < cities.length) {
@@ -139,6 +87,8 @@ export default function Searchbar() {
   const todayDay = getTodayDate();
   const prevWeekDate = getPastDate(6);
   const handleSend = async (cityName? : string) => {
+    // this function is used to send the city name to the weather api
+    // it updates our state with dispatch function
     const cityToFetch = cityName || query;
     const cityData = await getWeather(cityToFetch);
     const todaCityData = await getTodayWeather(cityToFetch);
@@ -205,7 +155,8 @@ export default function Searchbar() {
     setQuery('');
     setCities([]);
   };
-
+ 
+  // this will run only once , in the beginning to set the city
   if(!hasRun.current) {
     handleSend('bangalore');
     hasRun.current = true;

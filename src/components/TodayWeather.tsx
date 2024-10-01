@@ -8,6 +8,10 @@ import { HourToString } from "../utils/HourToString";
 import { timeDifference } from "../utils/timeDifference";
 
 
+/**
+ * it displays the selected day weather with its properties like wsw, uv index, sunrise, sunset, etc
+ * it also displays the selected hour weather with its properties like wsw, uv index, sunrise, sunset, etc 
+ */
 export default function TodayWeather({nav}: {nav: string}) {
   const data = useSelector((state: { weather: { forecast: WeatherItems[]}}) => state.weather);
   const day = useSelector((state: { dayandtemp: { day: string}}) => state.dayandtemp.day);
@@ -15,9 +19,6 @@ export default function TodayWeather({nav}: {nav: string}) {
   const hour = useSelector((state: { hourandtemp: { hour: string}}) => state.hourandtemp.hour);
   
   const selectedHourIndex = hourlyData.forecast.findIndex((forecastItem) => HourToString(forecastItem.dt) === hour);
-  // console.log(hour, 'hi')
-  // console.log(hourlyData.forecast[0].dt)
-  // console.log(selectedHourIndex, 'index')
   const selectedDayIndex = data.forecast.findIndex((forecastItem) => DateToDay(forecastItem.dt) === day);
   const selectedForecast = selectedDayIndex !== -1 ? data.forecast[selectedDayIndex] : data.forecast[0];
   const selectedForecastToday = selectedHourIndex !== -1 ? hourlyData.forecast[selectedHourIndex] : hourlyData.forecast[0];
@@ -38,8 +39,6 @@ export default function TodayWeather({nav}: {nav: string}) {
             <div className="w-full flex justify-center">
               <GaugeChart value={selectedForecastToday.uvIndex}/>
             </div>
-          {/* <GaugeChart value={20}/> */}
-            {/* <p className="text-5xl">{selectedForecastToday.uvIndex}</p> */}
           </HighlightCard.Middle>
         </HighlightCard>
         <HighlightCard>
@@ -113,8 +112,6 @@ export default function TodayWeather({nav}: {nav: string}) {
             <div className="w-full flex justify-center">
               <GaugeChart value={selectedForecast.uvIndex}/>
             </div>
-          {/* <GaugeChart value={20}/> */}
-            {/* <p className="text-5xl">{selectedForecast.uvIndex}</p> */}
           </HighlightCard.Middle>
         </HighlightCard>
         <HighlightCard>
@@ -135,9 +132,7 @@ export default function TodayWeather({nav}: {nav: string}) {
             <h3 className="">Sunrise & Sunset</h3>
           </HighlightCard.Head>
           <HighlightCard.Middle>
-            
               <SunriseandSunset sunrise={selectedForecast.sunrise} sunset={selectedForecast.sunset} sunSetDif={sunSetDiff} sunRiseDif={sunRiseDiff}/>
-
             </HighlightCard.Middle>
         </HighlightCard>
         <HighlightCard>
@@ -176,23 +171,7 @@ export default function TodayWeather({nav}: {nav: string}) {
       </div>
     </div>
   );
-};
-
-
-// const GaugeChart = ({ value, min = 0, max = 100 }: { value: number, min?: number, max?: number}) => {
-//   // const percentage = ((value - min) / (max - min)) * 100;
-//   // const clampedPercentage = Math.min(100, Math.max(0, percentage));
-//   // const rotation = (clampedPercentage / 100) * 180;
-
-//   return (
-//     <div className="w-[250px] h-24 relative border-gray-200 border-[10px] border-b-0" style={{borderRadius: '250px 250px 0 0'}}>
-//       <span className="absolute bottom-0 left-[50%] translate-x-[-50%] text-5xl">{value}</span>
-//   </div>
-//   );
-// };
-
-
-
+}
 
 const SunriseandSunset = ({sunrise, sunset, sunRiseDif, sunSetDif}: {sunrise: string, sunset: string, sunSetDif: string, sunRiseDif: string}) => {
   return (

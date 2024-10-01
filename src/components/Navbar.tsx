@@ -4,10 +4,14 @@ import { setTempUnitValues } from "../slices/weatherSlice";
 import { setTodayTempUnitValues } from "../slices/todayWeatherSlice";
 import { setPrevWeekTempUnitValues } from "../slices/prevWeekTempSlice";
 import DarkModeToggle from "./DarkModeToggle";
+import { NavbarProps } from "@/type";
 
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-export default function Navbar({setNav, nav}: {setNav: Function, nav: string}) {
+/**
+ * this component is used to switch between the weather data for today and for the week
+ * it also contains the dark mode toggle
+ */
+export default function Navbar({setNav, nav}: NavbarProps) {
   const tempUnit = useSelector((state: { weather: { tempUnit: string }}) => state.weather.tempUnit);
   const dispatch = useDispatch();
   return (
