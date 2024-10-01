@@ -5,7 +5,7 @@ import { DateToDay } from "../utils/DateToDay";
 import { FaLocationDot } from "react-icons/fa6";
 import GaugeChart from "./GaugeChart";
 import { HourToString } from "../utils/HourToString";
-import { timeDifference } from "@/utils/timeDifference";
+import { timeDifference } from "../utils/timeDifference";
 
 
 export default function TodayWeather({nav}: {nav: string}) {

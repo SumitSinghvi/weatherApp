@@ -7,8 +7,6 @@ export type Location = {
 
 export type WeatherItems = {
   dt: string;
-  sunrise: string;
-  sunset: string;
   temp: number;
   uvIndex: number;
   windSpeed: number;

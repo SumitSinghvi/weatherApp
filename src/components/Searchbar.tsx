@@ -8,10 +8,10 @@ import { setDate, setDay, setTemp } from "../slices/dayAndTempSlice";
 import { searchCity } from "../services/apiSearchCity";
 import { getTodayWeather } from "../services/apiTodayWeather";
 import { setTodayWeatherList } from "../slices/todayWeatherSlice";
-import { setHour, setHourTemp } from "@/slices/hourAndTempSlice";
-import { getWeatherByDate } from "@/services/apiWeatherByDate";
-import { setPrevWeekWeatherList } from "@/slices/prevWeekTempSlice";
-import { getPastDate, getTodayDate } from "@/utils/getPrevDate";
+import { setHour, setHourTemp } from "../slices/hourAndTempSlice";
+import { getWeatherByDate } from "../services/apiWeatherByDate";
+import { setPrevWeekWeatherList } from "../slices/prevWeekTempSlice";
+import { getPastDate, getTodayDate } from "../utils/getPrevDate";
 
 export interface RootItem {
   date: string;
@@ -157,7 +157,7 @@ export default function Searchbar() {
         windSpeed: item.wind_kph,
         humidity: item.humidity,
         visibility: item.vis_km,
-        airQuality: item.air_quality.pm2_5,
+        airQuality: item.air_quality?.pm2_5,
         description: item.condition.text,
         rainChance: item.chance_of_rain,
       })),

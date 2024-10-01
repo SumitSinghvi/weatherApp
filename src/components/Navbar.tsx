@@ -2,7 +2,7 @@ import { CgProfile } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
 import { setTempUnitValues } from "../slices/weatherSlice";
 import { setTodayTempUnitValues } from "../slices/todayWeatherSlice";
-import { setPrevWeekTempUnitValues } from "@/slices/prevWeekTempSlice";
+import { setPrevWeekTempUnitValues } from "../slices/prevWeekTempSlice";
 import DarkModeToggle from "./DarkModeToggle";
 
 

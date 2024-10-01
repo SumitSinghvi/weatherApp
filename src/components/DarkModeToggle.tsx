@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Switch } from "@/components/ui/switch"
+import { Switch } from "../components/ui/switch"
 
 function DarkModeToggle() {
   const [darkMode, setDarkMode] = useState(() => {
