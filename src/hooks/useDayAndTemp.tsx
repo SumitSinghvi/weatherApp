@@ -47,7 +47,7 @@ export default function useDayAndTemp() {
   }));
 
   if(weekTempAndDay[0].day === 'Invalid Date') {
-    return { weekTempAndDay: [{ day: 'Today', temp: 0, prevTemp: 0, icon: 'sun'}] };
+    return { weekTempAndDay: [{ day: 'Today', temp: 0, prevTemp: 0, icon: 'Sun.svg'}] };
   }
   return { weekTempAndDay };
 }

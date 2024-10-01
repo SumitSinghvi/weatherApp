@@ -7,7 +7,7 @@ import { TbTemperatureFahrenheit } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { Location, WeatherItems } from "../slices/weatherSlice";
 import { DateToDay } from "../utils/DateToDay";
-import Navbar from "@/components/Navbar";
+import Navbar from "../components/Navbar";
 
 export default function Sidebar({setNav, nav}: {setNav: (nav: string) => void, nav: string}) {
   // const icon = {
@@ -71,6 +71,7 @@ export default function Sidebar({setNav, nav}: {setNav: (nav: string) => void, n
             src={icon[selectedDayIndex]}
             className="md:w-[170px] w-[100px]"
             alt={icon[selectedDayIndex]}
+            data-testid="my-image"
           />
         </div>
         <div className="md:pt-10 md:pl-4 flex items-center md:items-start">

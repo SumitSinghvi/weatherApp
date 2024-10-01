@@ -21,8 +21,8 @@ export type WeatherItems = {
 
 const initialState = {
     location: {
-      city: "", 
-      country: "", 
+      city: "New York", 
+      country: "USA", 
     } as Location,
     forecast: [
       {
@@ -35,7 +35,7 @@ const initialState = {
         humidity: 0,
         visibility: 0,
         airQuality: 0,
-        description: "",
+        description: "Sunny",
         rainChance: 0,
       },
     ] as WeatherItems[],
