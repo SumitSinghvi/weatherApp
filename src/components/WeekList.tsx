@@ -3,6 +3,9 @@ import useDayAndTemp from "../hooks/useDayAndTemp";
 import useTodayHourAndTemp from "../hooks/useTodayHourAndTemp";
 import TodayWeatherCarousel from "./TodayWeatherCarousel";
 
+/**
+ * used to display the weather data for the week and hourly, depending on the nav
+ */
 export default function WeekList({ nav }: { nav: string }) {
   const { weekTempAndDay } = useDayAndTemp();
   const { todayTempAndHour } = useTodayHourAndTemp();
@@ -12,15 +15,6 @@ export default function WeekList({ nav }: { nav: string }) {
         <div className="md:w-full md:p-5 ">
           <TodayWeatherCarousel data={todayTempAndHour} />
         </div>
-        {/* <div className="flex gap-2 mt-10 overflow-x-scroll ">
-          {todayTempAndHour.map(
-            (d: { hr: string; temp: number; icon: string }) => (
-              <div key={d.hr}>
-                <Card day={d.hr} temp={d.temp} icon={d.icon} />
-              </div>
-            )
-          )}
-        </div> */}
       </div>
     );
   }
